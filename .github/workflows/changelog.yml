@@ -1,0 +1,32 @@
+name: Automated Changelog
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up git-chglog
+        run: |
+          curl -L https://github.com/git-chglog/git-chglog/releases/download/v0.15.0/git-chglog_0.15.0_linux_amd64.tar.gz -o git-chglog.tar.gz
+          tar -xzf git-chglog.tar.gz
+          sudo mv git-chglog /usr/local/bin/
+
+      - name: Generate CHANGELOG
+        run: |
+          git-chglog -o CHANGELOG.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "Update CHANGELOG.md [skip ci]"
+          git push
