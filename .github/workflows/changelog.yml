@@ -3,8 +3,8 @@ name: Automated Changelog
 on:
   push:
     branches:
-      - main
-
+      - master
+      
 jobs:
   update-changelog:
     runs-on: ubuntu-latest
